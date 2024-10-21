@@ -3,12 +3,6 @@ import { test, expect, request } from "@playwright/test";
 test.beforeEach(async ({ page }) => {
   //here we also logged in with browser to authorize the browser to interect with different locatiors to verify
   await page.goto("https://conduit.bondaracademy.com/");
-  await page.getByText("Sign in").click();
-  await page
-    .getByRole("textbox", { name: "Email" })
-    .fill("atiaraits19@gmail.com");
-  await page.getByRole("textbox", { name: "Password" }).fill("123456789");
-  await page.getByRole("button", { name: "Sign in" }).click();
 });
 
 test("Create Article & Delete Article Flow", async ({ page, request }) => {
