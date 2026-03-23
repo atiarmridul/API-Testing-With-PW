@@ -11,8 +11,10 @@ Playwright test project for the RealWorld Conduit demo app (`https://conduit.bon
 ## Project Structure
 
 - `playwright.config.ts`: Playwright configuration and browser projects.
+- `tests/auth.setup.ts`: Setup project that authenticates and prepares reusable auth state.
 - `tests/workingWithAPI.spec.ts`: UI + API interception/mocking example.
 - `test-data/tags.json`: Mock payload used in route interception.
+- `.auth/user.json`: Stored authenticated browser state consumed by browser projects.
 - `docs/`: Project docs and navigation.
 
 ## Prerequisites
@@ -30,11 +32,14 @@ bash scripts/install-hooks.sh
 
 ## Run Tests
 
-Run all tests (current suite runs `tests/workingWithAPI.spec.ts`):
+Run all tests:
 
 ```bash
 npx playwright test
 ```
+
+Note:
+- The `setup` project runs first and refreshes auth state used by dependent browser projects.
 
 Run a single spec:
 
@@ -53,9 +58,18 @@ npx playwright show-report
 After running `bash scripts/install-hooks.sh`, the repository hooks handle:
 
 - `pre-commit`: updates `docs/agent-progress.md`, syncs markdown index/docs, and stages markdown changes.
-- `prepare-commit-msg`: auto-adds a descriptive `Changes:` list only when the message has no body bullets yet.
-- `commit-msg`: accepts either descriptive bullets under `Changes:` or plain descriptive body bullets.
-- `pre-push`: runs markdown sync validation before allowing push.
+- `prepare-commit-msg`: auto-adds a `Changes:` template only for interactive commits with no body bullets yet.
+- `commit-msg`: requires human-readable bullet points in the commit body.
+- `pre-push`: runs markdown sync validation and validates commit-message quality for commits being pushed.
+
+Commit message format example:
+
+```text
+chore(tests): improve auth setup resilience
+
+- update auth setup to locate jwtToken by key instead of array index
+- refresh docs to match current hook behavior and auth setup flow
+```
 
 Optional commit metadata for tracker entries:
 
@@ -65,6 +79,9 @@ TASK="Describe your task" NEXT_STEP="Describe the next action" git commit -m "yo
 
 ## Notes
 
+- Authentication flow:
+  - `tests/auth.setup.ts` logs in via API and refreshes `.auth/user.json`.
+  - Browser projects (`chromium`, `firefox`, `webkit`) depend on `setup` and use `storageState`.
 - API endpoints used:
   - `https://conduit-api.bondaracademy.com/api`
   - `https://conduit.bondaracademy.com/`

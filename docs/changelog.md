@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `readme.md` navigation links to include contributing and troubleshooting docs.
 - Updated `readme.md` to reflect the current single-spec test setup in `tests/`.
 - Reintroduced `tests/auth.setup.ts` for setup-project-based authenticated test execution.
+- Updated `readme.md` with auth setup/storageState flow and strict commit-message hook behavior.
+- Expanded `docs/troubleshooting.md` with commit/push validation failures and recovery steps.
 
 ### Removed
 - Removed `tests/ArticleLifeCycleWithAPI.spec.ts`.
