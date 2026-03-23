@@ -9,9 +9,11 @@ if ! git rev-parse --git-dir > /dev/null 2>&1; then
   exit 1
 fi
 
-chmod +x scripts/sync-markdown.sh scripts/update-agent-progress.sh scripts/watch-markdown.sh scripts/install-hooks.sh .githooks/pre-commit .githooks/pre-push
+chmod +x scripts/sync-markdown.sh scripts/update-agent-progress.sh scripts/watch-markdown.sh scripts/install-hooks.sh .githooks/pre-commit .githooks/pre-push .githooks/prepare-commit-msg .githooks/commit-msg
 git config core.hooksPath .githooks
 
 echo "Installed git hooks from .githooks"
 echo "pre-commit now runs scripts/update-agent-progress.sh + scripts/sync-markdown.sh"
+echo "prepare-commit-msg now auto-adds a 'Changes:' list from staged files"
+echo "commit-msg now enforces that staged files are listed in commit message bullets"
 echo "pre-push now runs scripts/sync-markdown.sh"

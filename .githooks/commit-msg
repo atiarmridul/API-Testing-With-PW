@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MSG_FILE="${1:-}"
+
+if [ -z "$MSG_FILE" ] || [ ! -f "$MSG_FILE" ]; then
+  echo "commit-msg hook: commit message file is missing."
+  exit 1
+fi
+
+# Skip merge commits.
+if grep -qE '^Merge ' "$MSG_FILE"; then
+  exit 0
+fi
+
+STAGED_FILES=()
+while IFS= read -r file; do
+  [ -n "$file" ] && STAGED_FILES+=("$file")
+done < <(git diff --cached --name-only)
+
+if [ "${#STAGED_FILES[@]}" -eq 0 ]; then
+  exit 0
+fi
+
+if ! grep -qE '^- ' "$MSG_FILE"; then
+  echo "Commit message must include a bullet list describing staged changes."
+  exit 1
+fi
+
+MISSING=0
+for file in "${STAGED_FILES[@]}"; do
+  if ! grep -Fq "$file" "$MSG_FILE"; then
+    echo "Missing file in commit message list: $file"
+    MISSING=1
+  fi
+done
+
+if [ "$MISSING" -ne 0 ]; then
+  echo "Commit blocked: include every staged file in the commit message bullet list."
+  exit 1
+fi
