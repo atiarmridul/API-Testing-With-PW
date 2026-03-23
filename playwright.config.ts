@@ -35,8 +35,18 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: "setup",
+      testMatch: "auth.setup.ts",
+    },
+
+    {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"], headless: true },
+      use: {
+        ...devices["Desktop Chrome"],
+        headless: true,
+        storageState: ".auth/user.json",
+      },
+      dependencies: ["setup"]
     },
 
     {
@@ -44,12 +54,19 @@ export default defineConfig({
       use: {
         ...devices["Desktop Firefox"],
         headless: true,
+        storageState: ".auth/user.json",
       },
+      dependencies: ["setup"]
     },
 
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"], headless: true },
+      use: {
+        ...devices["Desktop Safari"],
+        headless: true,
+        storageState: ".auth/user.json",
+      },
+      dependencies: ["setup"]
     },
 
     /* Test against mobile viewports. */

@@ -14,10 +14,10 @@ test-results/
 playwright-report/
 blob-report/
 
-# Playwright local auth/cache state (contains local session data)
-.auth/
-playwright/.auth/
-playwright/.cache/
+# # Playwright local auth/cache state (contains local session data)
+# .auth/
+# playwright/.auth/
+# playwright/.cache/
 
 # Test coverage output
 coverage/
