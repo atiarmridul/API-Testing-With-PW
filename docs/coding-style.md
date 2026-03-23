@@ -37,6 +37,11 @@ Living style guide for this repository. Keep this file updated when coding patte
 - Keep file names descriptive and aligned with behavior (`*.spec.ts`, `auth.setup.ts`).
 - Use variable names that reflect purpose (`articleCreateResponseBody`, `accessToken`, `slugId`).
 
+## Commit Messages
+- Use a concise title plus body bullets written in plain language.
+- Body bullets should explain what changed (not raw git status or diff metrics).
+- Placeholder bullets are not allowed (`TODO`, `describe what changed`, etc.).
+
 ## Maintenance Rule
 - Update this file whenever coding style changes materially in active files.
 - If a new pattern appears in `tests/` or `playwright.config.ts`, add or revise the relevant section.

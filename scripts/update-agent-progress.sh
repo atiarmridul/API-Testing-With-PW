@@ -100,6 +100,44 @@ SESSION_ENTRY="$(cat <<EOF
 EOF
 )"
 
+# Skip adding a new entry when the latest session log block is identical.
+LATEST_ENTRY="$(awk '
+BEGIN {
+  in_log = 0
+  in_entry = 0
+}
+$0 == "## Session Log" {
+  in_log = 1
+  next
+}
+in_log == 1 && /^### / {
+  if (in_entry == 0) {
+    in_entry = 1
+    print
+    next
+  }
+  exit
+}
+in_entry == 1 {
+  print
+}
+' "$TRACKER_FILE")"
+
+EXPECTED_HEADER="### ${SESSION_DATE} (Auto Hook)"
+EXPECTED_TASK="- Task: ${TASK}"
+EXPECTED_STATUS="- Status: ${STATUS}."
+EXPECTED_FILES="- Files changed: ${FILES_CHANGED}."
+EXPECTED_NEXT="- Next step: ${NEXT_STEP}"
+
+if printf '%s\n' "$LATEST_ENTRY" | grep -Fxq "$EXPECTED_HEADER" &&
+   printf '%s\n' "$LATEST_ENTRY" | grep -Fxq "$EXPECTED_TASK" &&
+   printf '%s\n' "$LATEST_ENTRY" | grep -Fxq "$EXPECTED_STATUS" &&
+   printf '%s\n' "$LATEST_ENTRY" | grep -Fxq "$EXPECTED_FILES" &&
+   printf '%s\n' "$LATEST_ENTRY" | grep -Fxq "$EXPECTED_NEXT"; then
+  echo "Skipped duplicate auto-hook session entry in $TRACKER_FILE"
+  exit 0
+fi
+
 TMP_FILE="$(mktemp)"
 ENTRY_FILE="$(mktemp)"
 BEFORE_FILE="$(mktemp)"

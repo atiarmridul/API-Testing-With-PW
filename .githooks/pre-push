@@ -15,3 +15,37 @@ if [ -n "$MD_STATUS" ]; then
   git status --short
   exit 1
 fi
+
+# Validate all commits that are about to be pushed.
+COMMITS_TO_CHECK=()
+while read -r local_ref local_sha remote_ref remote_sha; do
+  # Ignore deleted refs.
+  if [ "$local_sha" = "0000000000000000000000000000000000000000" ]; then
+    continue
+  fi
+
+  if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
+    RANGE="$local_sha"
+  else
+    RANGE="${remote_sha}..${local_sha}"
+  fi
+
+  while IFS= read -r sha; do
+    [ -n "$sha" ] && COMMITS_TO_CHECK+=("$sha")
+  done < <(git rev-list "$RANGE")
+done
+
+if [ "${#COMMITS_TO_CHECK[@]}" -eq 0 ]; then
+  exit 0
+fi
+
+while IFS= read -r sha; do
+  [ -z "$sha" ] && continue
+  if ! bash scripts/validate-commit-message.sh --commit "$sha"; then
+    echo
+    echo "Push blocked: commit $sha does not have the required human-readable summary bullets."
+    echo "Fix with: git commit --amend (or reword), then push again."
+    echo
+    exit 1
+  fi
+done < <(printf '%s\n' "${COMMITS_TO_CHECK[@]}" | LC_ALL=C sort -u)

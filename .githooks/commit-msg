@@ -19,33 +19,4 @@ else
   exit 0
 fi
 
-CHANGE_BULLETS=""
-BODY_BULLETS=""
-
-if grep -q '^Changes:$' "$MSG_FILE"; then
-  CHANGE_BULLETS="$(awk '
-  BEGIN { in_changes = 0 }
-  $0 == "Changes:" { in_changes = 1; next }
-  in_changes == 1 && $0 ~ /^- / { print; next }
-  in_changes == 1 && $0 !~ /^- / && $0 !~ /^[[:space:]]*$/ { in_changes = 0 }
-  ' "$MSG_FILE")"
-else
-  BODY_BULLETS="$(awk '
-  NR > 1 && $0 ~ /^- / { print }
-  ' "$MSG_FILE")"
-fi
-
-VALID_BULLETS="$CHANGE_BULLETS"
-if [ -z "$VALID_BULLETS" ]; then
-  VALID_BULLETS="$BODY_BULLETS"
-fi
-
-if [ -z "$VALID_BULLETS" ]; then
-  echo "Commit message must include descriptive bullet items (with or without a 'Changes:' header)."
-  exit 1
-fi
-
-if printf '%s\n' "$VALID_BULLETS" | grep -Eq '^- [ACDMRTUXB][0-9]*[[:space:]]+'; then
-  echo "Commit blocked: describe what changed instead of listing raw git status/file entries."
-  exit 1
-fi
+bash scripts/validate-commit-message.sh --file "$MSG_FILE"

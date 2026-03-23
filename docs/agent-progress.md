@@ -3,7 +3,7 @@
 Purpose: keep an ongoing handoff log so any new agent can start from the current state without re-discovery.
 
 ## Last Updated
-- 2026-03-23 21:10:49 +06
+- 2026-03-23 21:46:05 +06
 
 ## Current Snapshot
 - Project: `pw-apitest-app`
@@ -86,13 +86,6 @@ Purpose: keep an ongoing handoff log so any new agent can start from the current
 ### 2026-03-23 (Auto Hook)
 - Task: Auto-update tracker from pre-commit hook.
 - Status: Completed.
-- Files changed: `.githooks/pre-commit`, `scripts/install-hooks.sh`, `scripts/update-agent-progress.sh`.
-- Next step: Review and refine this auto-generated session note if needed.
-
-
-### 2026-03-23 (Auto Hook)
-- Task: Auto-update tracker from pre-commit hook.
-- Status: Completed.
 - Files changed: `.githooks/commit-msg`, `.githooks/prepare-commit-msg`, `readme.md`, `scripts/install-hooks.sh`, `tests/ArticleLifeCycleWithAPI.spec.ts`, `tests/auth.setup.ts`.
 - Next step: Review and refine this auto-generated session note if needed.
 
@@ -101,13 +94,6 @@ Purpose: keep an ongoing handoff log so any new agent can start from the current
 - Task: Auto-update tracker from pre-commit hook.
 - Status: Completed.
 - Files changed: `docs/changelog.md`, `readme.md`, `tests/workingWithAPI.spec.ts`.
-- Next step: Review and refine this auto-generated session note if needed.
-
-
-### 2026-03-23 (Auto Hook)
-- Task: Auto-update tracker from pre-commit hook.
-- Status: Completed.
-- Files changed: `.githooks/commit-msg`, `.githooks/prepare-commit-msg`, `readme.md`, `scripts/install-hooks.sh`.
 - Next step: Review and refine this auto-generated session note if needed.
 
 
@@ -131,7 +117,28 @@ Purpose: keep an ongoing handoff log so any new agent can start from the current
 - Files changed: `.auth/user.json`, `docs/coding-style.md`, `docs/index.md`, `playwright.config.ts`, `tests/auth.setup.ts`, `tests/workingWithAPI.spec.ts`.
 - Next step: Review and refine this auto-generated session note if needed.
 
+
+### 2026-03-23 (Auto Hook)
+- Task: Auto-update tracker from pre-commit hook.
+- Status: Completed.
+- Files changed: `.githooks/commit-msg`, `.githooks/pre-push`, `.githooks/prepare-commit-msg`, `docs/coding-style.md`, `docs/contributing.md`, `scripts/install-hooks.sh`, `scripts/validate-commit-message.sh`.
+- Next step: Review and refine this auto-generated session note if needed.
+
+## Periodic Cleanup Policy
+- Run a docs cleanup pass every Friday or before each release branch cut.
+- Consolidate consecutive duplicate `Auto Hook` entries into a single entry.
+- Remove stale statements that no longer match repository reality (renames/restores/removals).
+- Keep cleanup edits explicit in commit message bullets.
+
+
+### 2026-03-23 (Auto Hook)
+- Task: Auto-update tracker from pre-commit hook.
+- Status: Completed.
+- Files changed: `.auth/user.json`, `.githooks/commit-msg`, `.githooks/pre-push`, `.githooks/prepare-commit-msg`, `docs/changelog.md`, `docs/coding-style.md`, `docs/contributing.md`, `scripts/install-hooks.sh`, `scripts/update-agent-progress.sh`, `scripts/validate-commit-message.sh`.
+- Next step: Review and refine this auto-generated session note if needed.
+
 ## Update Rules
-- Append; do not delete historical entries.
+- Append by default; do not rewrite non-duplicate historical work entries.
+- Duplicate `Auto Hook` entries may be consolidated during periodic cleanup.
 - Keep entries short and actionable.
 - Always include: `task`, `status`, `files changed`, `next step`.

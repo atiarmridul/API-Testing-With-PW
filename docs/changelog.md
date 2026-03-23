@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refreshed `readme.md` with a quick start section, manual sync command, and repository usage notes.
 - Updated `readme.md` navigation links to include contributing and troubleshooting docs.
 - Updated `readme.md` to reflect the current single-spec test setup in `tests/`.
+- Reintroduced `tests/auth.setup.ts` for setup-project-based authenticated test execution.
 
 ### Removed
 - Removed `tests/ArticleLifeCycleWithAPI.spec.ts`.
-- Removed `tests/auth.setup.ts`.
