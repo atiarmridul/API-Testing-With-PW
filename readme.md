@@ -53,8 +53,8 @@ npx playwright show-report
 After running `bash scripts/install-hooks.sh`, the repository hooks handle:
 
 - `pre-commit`: updates `docs/agent-progress.md`, syncs markdown index/docs, and stages markdown changes.
-- `prepare-commit-msg`: auto-adds a `Changes:` list based on staged files.
-- `commit-msg`: enforces that the commit message includes bullet items for all staged files.
+- `prepare-commit-msg`: auto-adds a descriptive `Changes:` list.
+- `commit-msg`: enforces descriptive bullet items under `Changes:`.
 - `pre-push`: runs markdown sync validation before allowing push.
 
 Optional commit metadata for tracker entries:

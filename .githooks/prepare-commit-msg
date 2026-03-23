@@ -29,10 +29,82 @@ if [ "${#STAGED_LINES[@]}" -eq 0 ]; then
   exit 0
 fi
 
+ADDED=0
+UPDATED=0
+DELETED=0
+RENAMED=0
+COPIED=0
+OTHER=0
+
+for line in "${STAGED_LINES[@]}"; do
+  status="${line%%[[:space:]]*}"
+  case "$status" in
+    A*)
+      ADDED=$((ADDED + 1))
+      ;;
+    M*|T*|U*|X*|B*)
+      UPDATED=$((UPDATED + 1))
+      ;;
+    D*)
+      DELETED=$((DELETED + 1))
+      ;;
+    R*)
+      RENAMED=$((RENAMED + 1))
+      ;;
+    C*)
+      COPIED=$((COPIED + 1))
+      ;;
+    *)
+      OTHER=$((OTHER + 1))
+      ;;
+  esac
+done
+
+SCOPES=()
+while IFS= read -r file; do
+  [ -z "$file" ] && continue
+  scope="repo-root"
+  if [[ "$file" == */* ]]; then
+    scope="${file%%/*}"
+  fi
+
+  exists=0
+  for existing in "${SCOPES[@]-}"; do
+    if [ "$existing" = "$scope" ]; then
+      exists=1
+      break
+    fi
+  done
+
+  if [ "$exists" -eq 0 ]; then
+    SCOPES+=("$scope")
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACDMRTUXB | LC_ALL=C sort -u)
+
+SCOPE_SUMMARY=""
+for scope in "${SCOPES[@]-}"; do
+  if [ -n "$SCOPE_SUMMARY" ]; then
+    SCOPE_SUMMARY="${SCOPE_SUMMARY}, "
+  fi
+  SCOPE_SUMMARY="${SCOPE_SUMMARY}${scope}"
+done
+
+if [ -z "$SCOPE_SUMMARY" ]; then
+  SCOPE_SUMMARY="repo-root"
+fi
+
+SHORTSTAT="$(git diff --cached --shortstat)"
+FILES_CHANGED="$(printf '%s\n' "$SHORTSTAT" | sed -nE 's/.* ([0-9]+) files? changed.*/\1/p')"
+INSERTIONS="$(printf '%s\n' "$SHORTSTAT" | sed -nE 's/.* ([0-9]+) insertions?\(\+\).*/\1/p')"
+DELETIONS="$(printf '%s\n' "$SHORTSTAT" | sed -nE 's/.* ([0-9]+) deletions?\(-\).*/\1/p')"
+FILES_CHANGED="${FILES_CHANGED:-0}"
+INSERTIONS="${INSERTIONS:-0}"
+DELETIONS="${DELETIONS:-0}"
+
 {
   echo
   echo "Changes:"
-  for line in "${STAGED_LINES[@]}"; do
-    echo "- ${line}"
-  done
+  echo "- Updated areas: ${SCOPE_SUMMARY}."
+  echo "- Change types: ${UPDATED} modified, ${ADDED} added, ${DELETED} deleted, ${RENAMED} renamed, ${COPIED} copied, ${OTHER} other."
+  echo "- Diff stats: ${FILES_CHANGED} files changed, +${INSERTIONS} / -${DELETIONS} lines."
 } >> "$MSG_FILE"

@@ -14,6 +14,6 @@ git config core.hooksPath .githooks
 
 echo "Installed git hooks from .githooks"
 echo "pre-commit now runs scripts/update-agent-progress.sh + scripts/sync-markdown.sh"
-echo "prepare-commit-msg now auto-adds a 'Changes:' list from staged files"
-echo "commit-msg now enforces that staged files are listed in commit message bullets"
+echo "prepare-commit-msg now auto-adds a descriptive 'Changes:' summary"
+echo "commit-msg now enforces descriptive bullets under the 'Changes:' section"
 echo "pre-push now runs scripts/sync-markdown.sh"

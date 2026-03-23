@@ -13,29 +13,30 @@ if grep -qE '^Merge ' "$MSG_FILE"; then
   exit 0
 fi
 
-STAGED_FILES=()
-while IFS= read -r file; do
-  [ -n "$file" ] && STAGED_FILES+=("$file")
-done < <(git diff --cached --name-only)
-
-if [ "${#STAGED_FILES[@]}" -eq 0 ]; then
+if ! git diff --cached --quiet --exit-code; then
+  :
+else
   exit 0
 fi
 
-if ! grep -qE '^- ' "$MSG_FILE"; then
-  echo "Commit message must include a bullet list describing staged changes."
+if ! grep -q '^Changes:$' "$MSG_FILE"; then
+  echo "Commit message must include a 'Changes:' section."
   exit 1
 fi
 
-MISSING=0
-for file in "${STAGED_FILES[@]}"; do
-  if ! grep -Fq "$file" "$MSG_FILE"; then
-    echo "Missing file in commit message list: $file"
-    MISSING=1
-  fi
-done
+CHANGE_BULLETS="$(awk '
+BEGIN { in_changes = 0 }
+$0 == "Changes:" { in_changes = 1; next }
+in_changes == 1 && $0 ~ /^- / { print; next }
+in_changes == 1 && $0 !~ /^- / && $0 !~ /^[[:space:]]*$/ { in_changes = 0 }
+' "$MSG_FILE")"
 
-if [ "$MISSING" -ne 0 ]; then
-  echo "Commit blocked: include every staged file in the commit message bullet list."
+if [ -z "$CHANGE_BULLETS" ]; then
+  echo "Commit message must include at least one bullet item under 'Changes:'."
+  exit 1
+fi
+
+if printf '%s\n' "$CHANGE_BULLETS" | grep -Eq '^- [ACDMRTUXB][0-9]*[[:space:]]+'; then
+  echo "Commit blocked: describe what changed instead of listing raw git status/file entries."
   exit 1
 fi
