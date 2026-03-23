@@ -4,9 +4,8 @@ set -euo pipefail
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 cd "$ROOT_DIR"
 
+bash scripts/update-agent-progress.sh
 bash scripts/sync-markdown.sh
 
-# Ensure regenerated markdown index is included in the commit automatically.
-if [ -f docs/index.md ]; then
-  git add docs/index.md
-fi
+# Ensure auto-regenerated markdown updates are included in the commit automatically.
+git add -A -- '*.md' ':(glob)**/*.md'
