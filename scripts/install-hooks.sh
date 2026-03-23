@@ -14,6 +14,6 @@ git config core.hooksPath .githooks
 
 echo "Installed git hooks from .githooks"
 echo "pre-commit now runs scripts/update-agent-progress.sh + scripts/sync-markdown.sh"
-echo "prepare-commit-msg now auto-adds a descriptive 'Changes:' summary"
-echo "commit-msg now enforces descriptive bullets under the 'Changes:' section"
+echo "prepare-commit-msg auto-adds a descriptive 'Changes:' summary when no bullets exist"
+echo "commit-msg accepts either 'Changes:' bullets or plain descriptive body bullets"
 echo "pre-push now runs scripts/sync-markdown.sh"

@@ -20,6 +20,11 @@ if grep -q '^Changes:$' "$MSG_FILE"; then
   exit 0
 fi
 
+# If the message already contains body bullets, preserve the author's format.
+if awk 'NR > 1 && $0 ~ /^- / { found = 1 } END { exit(found ? 0 : 1) }' "$MSG_FILE"; then
+  exit 0
+fi
+
 STAGED_LINES=()
 while IFS= read -r line; do
   [ -n "$line" ] && STAGED_LINES+=("$line")
