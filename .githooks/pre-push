@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+cd "$ROOT_DIR"
+
+bash scripts/sync-markdown.sh
+
+MD_STATUS="$(git status --porcelain | grep -E '\.md($| )' || true)"
+if [ -n "$MD_STATUS" ]; then
+  echo
+  echo "Markdown files were updated by scripts/sync-markdown.sh."
+  echo "Commit the updated markdown files, then push again."
+  echo
+  git status --short
+  exit 1
+fi

@@ -1,0 +1,43 @@
+# Ignore local and generated artifacts only.
+# Keep source code, tests, and docs tracked in git.
+
+# Dependencies
+node_modules/
+
+# Package manager caches
+.npm/
+.pnpm-store/
+.yarn/
+
+# Playwright test outputs (generated per run)
+test-results/
+playwright-report/
+blob-report/
+
+# Playwright local auth/cache state (contains local session data)
+.auth/
+playwright/.auth/
+playwright/.cache/
+
+# Test coverage output
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS/editor noise
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.tmp
