@@ -42,3 +42,53 @@ reports/
 - Performance checks
 - Parallel execution
 - Reporting dashboard
+
+## Tech Stack
+
+- Playwright
+- TypeScript
+- Node.js
+- API Automation
+
+## Prerequisites
+
+- Node.js
+- npm
+- Playwright installed
+
+## Setup
+
+```bash
+git clone https://github.com/atiarmridul/API-Testing-With-PW.git
+cd API-Testing-With-PW
+npm install
+```
+
+## Run Tests
+
+```bash
+npx playwright test
+```
+
+## Learning Outcomes
+
+This repository helps practice:
+
+- API automation fundamentals
+- Request and response validation
+- Authentication handling
+- Automation framework structure
+- TypeScript-based automation
+
+## Recommended Future Enhancements
+
+- Add reusable request helpers
+- Add reporting support
+- Add environment configuration
+- Add CI/CD workflow
+- Add test data management
+
+## Repository Information
+
+- Repository Owner: Atiar Mridul
+- GitHub Profile: https://github.com/atiarmridul
